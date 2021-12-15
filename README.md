@@ -1,5 +1,6 @@
 # SODABayes
 subsetted orthogonal data augmentation for Bayesian genomic prediction
+
 supportted models: BayesA, BayesB, BayesC, BayesCpi, BayesR, and BayesRc
 # source code
 SODABayes.f90
