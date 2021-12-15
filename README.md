@@ -16,7 +16,8 @@ ifort -o soda -qopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90
 or
 
 gfortran -o soda -fopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes
-# read the manual for instructions
+# Usage
+read the manual for instructions
 
 # license
 This program is free for academic uses. You can redistribute it and/or modify it under the terms 
