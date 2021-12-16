@@ -68,7 +68,7 @@ program SODABayes
                 call get_default_options               
                 call parse_parfile_options(npar, parameters)
                 call parse_cmdLine     
-                write(*,'(a)') 'job started: '//trim(job_name)               
+                write(*,'(a)') 'job '//trim(job_name)//' started...'               
                 call run_program_sodaBayes(status)
                 if(status /= 0) then
                     write(*,'(a)') 'job '//trim(job_name)//' did not complete.'
@@ -99,7 +99,7 @@ program SODABayes
     else
         call get_default_options
         call parse_cmdLine  
-        write(*,'(a)') 'job started: '//trim(job_name)                       
+        write(*,'(a)') 'job '//trim(job_name)//' started...'                      
         call run_program_sodaBayes(status)
         if(status /= 0) then
             write(*,'(a)') 'job '//trim(job_name)//' did not complete.'
@@ -108,7 +108,6 @@ program SODABayes
             write(*,'(a)') 'job '//trim(job_name)//' completed.'                    
         end if        
     end if
-    read(*,*)
     contains
   subroutine run_program_sodaBayes(status)
     implicit none
