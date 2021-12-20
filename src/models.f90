@@ -16,7 +16,7 @@ subroutine soda_bayes
   integer, dimension(:), allocatable :: gflag
   real(real64), dimension(:), allocatable :: gtemp  
   real(real64) :: logdetV, uhat, zz, zz_vare, rhs, v1, gk, gt, gdiff, scale
-  real(real64) :: sk, skk, r, ssculm, nnind, nnaind, clike
+  real(real64) :: yhat, vary, sk, skk, r, ssculm, nnind, nnaind, clike
   real(real64), dimension(maxdist) :: s, stemp
   real(real64), pointer :: z(:), za(:)
   
@@ -90,7 +90,23 @@ subroutine soda_bayes
   gstore=0d0
   mu_store=0d0  
   call compute_residuals
-  vara=scale_va*df_va/(df_va+2.0d0) !mode
+  if(df_va <=0.0d0) then
+      yhat=sum(why)/nnind
+      vary= sum((why-yhat)*(why-yhat))/(nnind-1.0d0)
+      if(BayesMethod .eq. BayesA) then
+          vara=2.0d0*scale_va*vary/nloci   !scale_va as heritability
+      else if(BayesMethod .eq. BayesB) then
+          vara=2.0d0*scale_va*vary/nloci/p(1,2) 
+      else
+          do i=1,ngroup
+              vara = vara + dot_product(p(i,:),mix)
+          end do
+          vara=scale_va*vary/nloci/vara
+      end if
+      scale_va=0.0d0                   !set scale_va to 0
+  else 
+      vara=scale_va*df_va/(df_va+2.0d0) !mode
+  end if
   if(BayesMethod .eq. BayesA .or. BayesMethod .eq. BayesB) then
       vara_s = vara      
       vara_sstore=0.0d0
@@ -595,7 +611,7 @@ subroutine regular_bayes()
   logical :: overflow
   integer :: i, j, k, kk, jj, b, rep, snploc, included, indistflag, counter, sg
   real(real64) :: logdetV, uhat, zz, zz_vare, rhs, v1, gk, gt, scale
-  real(real64) :: sk, skk, r, ssculm, nnind, clike
+  real(real64) :: yhat, vary, sk, skk, r, ssculm, nnind, clike
   real(real64), dimension(maxdist) :: s, stemp
   real(real64), pointer :: z(:)
   
@@ -665,13 +681,29 @@ subroutine regular_bayes()
    gstore=0d0
    mu_store=0d0  
    call compute_residuals
-   vara=scale_va*df_va/(df_va+2.0d0) !mode
+   if(df_va <=0.0d0) then
+       yhat=sum(why)/nnind
+       vary= sum((why-yhat)*(why-yhat))/(nnind-1.0d0)
+       if(BayesMethod .eq. BayesA) then
+           vara=2.0d0*scale_va*vary/nloci   !scale_va as heritability
+       else if(BayesMethod .eq. BayesB) then
+           vara=2.0d0*scale_va*vary/nloci/p(1,2)
+       else
+           do i=1,ngroup
+               vara = vara + dot_product(p(i,:),mix)
+           end do
+           vara=scale_va*vary/nloci/vara
+       end if
+       scale_va=0.0d0                   !set scale_va to 0
+   else 
+       vara=scale_va*df_va/(df_va+2.0d0) !mode
+   end if
    if(BayesMethod .eq. BayesA .or. BayesMethod .eq. BayesB) then
-      vara_s = vara      
-      vara_sstore=0.0d0
-   else
-      gp=mix*vara      
-      vara_store=0d0
+       vara_s = vara      
+       vara_sstore=0.0d0
+   else       
+       gp=mix*vara      
+       vara_store=0d0
    end if  
    scale=(dot_product(yadj,yadj)+scale_ve*df_ve)/ (nnind+df_ve)
    vare=rand_scaled_inverse_chi_square(nnind+df_ve,scale,0)

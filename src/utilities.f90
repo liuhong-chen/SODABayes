@@ -232,14 +232,17 @@ subroutine write_log
        else 
             write(21,908) 'SODA off', SODAOFF
        end if
-       write(21,901) 'Seed ', seed1       
+       write(21,901) 'Seed ', seed1  
+       write(21,902) 'Prefix for output files',trim(outprefix)        
    else
        write(21,902) 'Prefix for input files',trim(inprefix)
-       write(21,902) 'Prefix for output files',trim(outprefix)
        write(21,903) 'No. of loci',nloci
        write(21,903) 'No. of individuals',nind
+       write(21,902) 'model file',trim(modfil)
+       write(21,902) 'freq file',trim(freqfil)
+       write(21,902) 'effects file',trim(efffil)       
+       write(21,902) 'Prefix for output files',trim(outprefix)       
    end if
-   write(21,902) 'Prefix for output files',trim(outprefix)   
    call flush(21)
 901 format(a,t30,'= ',i12)   
 902 format(a,t30,': ',a)

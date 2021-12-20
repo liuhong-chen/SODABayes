@@ -24,7 +24,7 @@ module useroptions
     opt = (/&
     option(1, '-parfile'   ,'[filename]','parameter file'                          ,a_char,         ''),&
     option(2, '-job_name'  ,'[char]',    'job name'                                ,a_char,         ''),&        
-    option(3, '-method'    ,'[char]',    'Bayesian method'                         ,a_char,   'BayesC'),&     
+    option(3, '-method'    ,'[char]',    'Bayesian method'                         ,a_char, 'BayesCpi'),&     
     option(4, '-bfile'     ,'[prefix]',  'prefix PLINK binary files'               ,a_char,         ''),&
     option(5, '-pheno'     ,'[filename]','alternative phenotype file'              ,a_char,         ''),&
     option(6, '-pheno_name','[char]',    'phenotype column name'                   ,a_char,         ''),&
@@ -44,7 +44,7 @@ module useroptions
     option(20,'-seed'      ,'[num]',     'seed value for random number generator'  ,a_int,         '0'),&
     option(21,'-SODAOn'    ,'[flag]',    'turn soda on'                            ,a_flag,        't'),&
     option(22,'-SODAOff'   ,'[flag]',    'turn soda off'                           ,a_flag,        'f'),&
-    option(23,'-nthreads'  ,'[num]',     'number of threads'                       ,a_int,         '0'),&
+    option(23,'-nthreads'  ,'[num]',     'number of threads'                       ,a_int,         '1'),&
     option(24,'-blocksize' ,'[num]',     'number of SNPs in a block'               ,a_int,         '0'),&
     option(25,'-nblocks'   ,'[num]',     'number of blocks'                        ,a_int,         '0'),&
     option(26,'-rblocks'   ,'[flag]',    'randomly assign SNPs into blocks'        ,a_flag,        'f'),&
@@ -322,6 +322,7 @@ end subroutine parse_pheno
 subroutine parse_predict
   integer::i
   logical :: flag, fileExist
+  character(len=200) :: filein
   mcmc=.true.
   do i=1,nopt
      if(str_match(trim(opt(i)%key),'-predict')) then
@@ -332,36 +333,36 @@ subroutine parse_predict
   if(.not.mcmc) then
      do i=1,nopt
         if(str_match(trim(opt(i)%key),'-model')) then
-           inprefix=trim(opt(i)%default)
-           if(str_match(trim(inprefix),' ')) then
+           filein=trim(opt(i)%default)
+           if(str_match(trim(filein),' ')) then
                print *,'No model file specified'
                stop 'Error: No model file specified'
            end if
-           modfil=trim(inprefix)
+           modfil=trim(filein)
            inquire(file=modfil,exist=fileExist)
            if(.not.fileExist)then
               print *,'model file ',trim(modfil),' not found'
               stop
            end if
         else if(str_match(trim(opt(i)%key),'-freq')) then
-           inprefix=trim(opt(i)%default)
-           if(str_match(trim(inprefix),' ')) then 
+           filein=trim(opt(i)%default)
+           if(str_match(trim(filein),' ')) then 
                print *, 'No SNP frequency file specified'
                stop 'Error: No SNP frequency file specified'
            end if    
-           freqfil=trim(inprefix)
+           freqfil=trim(filein)
            inquire(file=freqfil,exist=fileExist)
            if(.not.fileExist)then
               write(*,*)'freq file ',trim(freqfil),' not found'
               stop
            end if
         else if(str_match(trim(opt(i)%key),'-effects')) then
-           inprefix=trim(opt(i)%default)
-           if(str_match(trim(inprefix),' ')) then
+           filein=trim(opt(i)%default)
+           if(str_match(trim(filein),' ')) then
                print *, 'No SNP effect file specified'
                stop 'Error: No SNP effect file specified'
            end if    
-           efffil=trim(inprefix)
+           efffil=trim(filein)
            inquire(file=freqfil,exist=fileExist)
            if(.not.fileExist)then
               print *,'effect file ',trim(efffil),' not found'
@@ -457,14 +458,14 @@ end subroutine parse_snpgrp_file
 subroutine parse_soda
   integer :: i
   logical :: flag
-  setnthreads = .false.
   SODAOFF = .false.
   rblocks = .false.
   setblocksize = .false.
+  setblocks = .false.
   do i=1,nopt
      if(ssmatch(trim(opt(i)%key),'-nthreads')) then
         nthreads = cast_int(opt(i)%default)
-        if(nthreads > 0) setnthreads = .true.
+        nthreads = min(nthreads,maxthreads)
      else if(ssmatch(trim(opt(i)%key),'-SODAOFF')) then
         flag = cast_logical(opt(i)%default)
         if(flag) SODAOFF = .true. 
@@ -479,15 +480,9 @@ subroutine parse_soda
         if(blocksize > 0) setblocksize = .true.
      else if(ssmatch(trim(opt(i)%key),'-nblocks')) then
         nblocks = cast_int(opt(i)%default)
-        if(nblocks > 0) setnblocks = .true.
+        if(nblocks > 0) setblocks = .true.
      end if     
   end do
-  if(setnthreads) then
-      nthreads = min(nthreads,maxthreads)
-  else
-      nthreads = maxthreads
-  end if
-  if(nthreads < 2) SODAOFF = .true.
 end subroutine parse_soda
 
 subroutine parse_priors
@@ -501,16 +496,8 @@ subroutine parse_priors
         scale_ve = cast_float(opt(i)%default)
      else if(str_match(trim(opt(i)%key),'-df_va')) then
         df_va = cast_float(opt(i)%default)
-        if(df_va <0.0d0) then
-            print *, 'Error: degree of freedom for vara must be positive'
-            stop
-        end if
      else if(str_match(trim(opt(i)%key),'-df_ve')) then
         df_ve = cast_float(opt(i)%default)
-        if(df_ve < 0.0d0) then
-            print *, 'Error: degree of freedom for vare must be positive'
-            stop
-        end if
      else if(str_match(trim(opt(i)%key),'-mix')) then
          if(BayesMethod .eq. BayesA .or. BayesMethod .eq. BayesB) cycle
          if(BayesMethod .eq. BayesC .or. BayesMethod .eq. BayesCpi) then

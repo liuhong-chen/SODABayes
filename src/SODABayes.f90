@@ -1,4 +1,44 @@
 program SODABayes
+!version 1.10
+!Added an option for alternative phenotypic file
+!Added a parameter file for user supplied options
+!Added BayesA, BayesB, BayesC, and BayesRc methods
+!version 1.9
+!Collapsed pseudo phenotypes for sampling of residual variance
+!Changed to use omp parallel for the inner loop due to lower overhead cost
+!version 1.8
+!Removed mean column from the augmented blocks
+!version 1.7
+!Implemented a rank protection procedure for potential rank-deficient blocks; This could 
+!occasionaly happens when the power method fails to find the largest eigenvalue
+!version 1.6
+!Used a population count method for faster calculation of X'X
+!Used different parallel strategies for large and small blocks
+!Load binary genotypes into a charater array one snp a time
+!Added a general mean covariate to each data block for augmentation
+!version 1.5
+!Used omp parallel for the calculation of X'X
+!Version 1.4
+!Changed the equation for estimating marker variance
+!Allowed the implementation of BayesCp using the same procedure
+!Fixed a bug in setting blocksize when nblocks is specified
+!Fixed a race condition for gflag in the mcmc procedure
+!Version 1.3
+!Used omp parallel for the outer mcmc loop
+!Used omp reduction to update the residuals
+!Version 1.2
+!Fixed a potential memory leak problem in PowerMethod subroutine
+!Fixed a race condition problem in the PowerMethod subroutine
+!Version 1.1
+!Used omp parallel from the inner mcmc loop
+!Used threadprivate arrays for updating the residuals
+!Used !$omp do loop to sample marker effects in parallel
+!Wrote a pivoted Cholesky decomposition method for positive semi-definite matrices
+!Used !$omp do loop to sample marker effects in parallel
+!Wrote a Cholesky decoposition for positive definite matrices
+!Wrote a PowerMethod subroutine for finding the largest eigenvalue
+!Wrote a parallel random variable sampler
+!Started from the original old version of the BayesR source code
     use useroptions
     use utilities
     use models
@@ -68,7 +108,7 @@ program SODABayes
                 call get_default_options               
                 call parse_parfile_options(npar, parameters)
                 call parse_cmdLine     
-                write(*,'(a)') 'job '//trim(job_name)//' started...'               
+                write(*,'(a)') 'job '//trim(job_name) //'started...'              
                 call run_program_sodaBayes(status)
                 if(status /= 0) then
                     write(*,'(a)') 'job '//trim(job_name)//' did not complete.'
@@ -99,7 +139,7 @@ program SODABayes
     else
         call get_default_options
         call parse_cmdLine  
-        write(*,'(a)') 'job '//trim(job_name)//' started...'                      
+        write(*,'(a)') 'job '//trim(job_name)//' started...'                       
         call run_program_sodaBayes(status)
         if(status /= 0) then
             write(*,'(a)') 'job '//trim(job_name)//' did not complete.'

@@ -60,7 +60,7 @@
   integer*1, parameter :: FIVEMASK8=z'55'
   integer(int64), parameter :: FIVEMASK64=z'5555555555555555'  
   logical :: SODAOFF, rblocks
-  logical :: setnthreads, setblocksize, setnblocks
+  logical :: setblocks, setblocksize
   integer :: maxthreads, nthreads, nprocs, nblocks, blocksize, blockt, naind, nbatch, nskipped, naless
   logical, dimension(:), allocatable :: skip_j
   integer, dimension(:), allocatable :: i_skipped    

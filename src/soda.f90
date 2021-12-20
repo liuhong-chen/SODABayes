@@ -436,7 +436,7 @@ subroutine setup_soda
   if(setblocksize) then
       nblocks = ceiling(dble(nloci) / blocksize)
       blockt = nblocks
-  else if(setnblocks) then
+  else if(setblocks) then
       blocksize = ceiling(dble(nloci) / nblocks)
       blockt = nloci - (blocksize-1) * nblocks
   else
@@ -444,7 +444,10 @@ subroutine setup_soda
       nblocks = ceiling(dble(nloci) / blocksize)  
       blockt = nblocks      
   end if
-            
+  if(blocksize <= 1) then
+      SODAOFF = .true.
+      return
+  end if
   naind = blocksize
   allocate(xxd(nblocks), XA(naind,nloci), yA(naind), yAadj(naind), skip_j(nloci), i_skipped(nloci),stat=ios)
   if( ios /= 0 )then
