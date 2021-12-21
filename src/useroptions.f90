@@ -462,6 +462,7 @@ subroutine parse_soda
   rblocks = .false.
   setblocksize = .false.
   setblocks = .false.
+  nthreads = maxthreads
   do i=1,nopt
      if(ssmatch(trim(opt(i)%key),'-nthreads')) then
         nthreads = cast_int(opt(i)%default)
