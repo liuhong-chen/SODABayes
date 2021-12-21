@@ -68,7 +68,7 @@ program SODABayes
                 call get_default_options               
                 call parse_parfile_options(npar, parameters)
                 call parse_cmdLine     
-                write(*,'(a)') 'job '//trim(job_name) //'started...'              
+                write(*,'(a)') 'job '//trim(job_name) //' started...'              
                 call run_program_sodaBayes(status)
                 if(status /= 0) then
                     write(*,'(a)') 'job '//trim(job_name)//' did not complete.'
