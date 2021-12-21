@@ -1,0 +1,18 @@
+#example 2: run Regular BayesR MCMC sampling 
+
+BEGIN BayesR_Regular_MCMC        
+   -bfile ../data/simdata1_train         #input file prefix
+   -method BayesR                        #BayesA/BayesB/BayesC/BayesCpi/BayesR/BayesRc
+   -scale_va 50                          #scale for snp variance
+   -scale_ve 50                          #scale for residual variance
+   -df_va 4.5                            #degree of freedom for snp variance
+   -df_ve 4.5                            #degree of freendom for residual variance
+   -numit 10000                          #mcmc chain length
+   -burnin 2000                          #burn-in period
+   -thin 1                               #thinning rate
+   -nmix 4                               #number of mixture distributions
+   -mix 0.0,0.0001,0.001,0.01            #proportional variances of mixture distributions
+   -SODAOff                              #Default: false
+   -seed 123456789                       #seed for random nubmer generator;set to 0 will use system_clock()
+   -out bayesr_mcmc_example_2            #output file prefix 
+END BayesR_Regular_MCMC
