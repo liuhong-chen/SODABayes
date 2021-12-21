@@ -1,0 +1,24 @@
+Running program SODABayes: SODABayesR_Example_MCMC
+      Run started at 2021-12-21 06:54:10
+Prefix for input files       : ../data/simdata1_train
+No. of loci                  =     9346
+No. of individuals           =     2326
+Prior Vara(Scale DF)         =  50.000000  4.500000
+Prior Vare(Scale DF)         =  50.000000  4.500000
+No. of MCMC cycles           =    10000
+Burnin                       =     2000
+Thinning rate                =        1
+Bayesian method              : BayesR
+No. of mixtures              =        4
+Variance of dist             =    0.00000   0.00010   0.00100   0.01000
+Dirichlet prior              =    1.00000   1.00000   1.00000   1.00000
+SODA on                      = T
+No. of threads               =        4
+No. of blocks                =       10
+Block size                   =      935
+Random blocks                = F
+Seed                         =    123456789
+Prefix for output files      : bayesr_mcmc_example_1
+        Run ended at 2021-12-21 06:58:03
+        Walltime used (seconds)
+Setup: 8.75             MCMC: 224.00           Total: 232.75          
