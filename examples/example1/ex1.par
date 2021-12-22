@@ -17,7 +17,7 @@ BEGIN SODABayesR_Example_MCMC            #BEGIN job_name
    -nblocks 10                           #number of blocks for SODA
    -seed 123456789                       #seed for random nubmer generator;set to 0 will use system_clock()
    -out bayesr_mcmc_example_1            #output file prefix 
-END BayesR_Example_MCMC                  #END job_name
+END SODABayesR_Example_MCMC              #END job_name
 
 BEGIN SODABayesR_Example_Prediction      #BEGIN job_name
     -bfile ../data/simdata1_pred         #input file prefix
@@ -26,5 +26,5 @@ BEGIN SODABayesR_Example_Prediction      #BEGIN job_name
     -freq    bayesr_mcmc_example_1.frq   #snp allele frequency file
     -effects bayesr_mcmc_example_1.eff   #snp effect file
     -out pred_bayesr_mcmc_example_1      #output file prefix
-END BayesR_Example_Prediction            #END job_name
+END SODABayesR_Example_Prediction        #END job_name
    
