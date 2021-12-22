@@ -62,6 +62,10 @@ subroutine soda_bayes
       snpstore=0d0
       indiststore=0d0  
       varstore=0.0d0
+      if(BayesMethod .ne. BayesRc) then   
+          snptracker(:,1)=1
+      end if  
+      snptracker(:,2)=2      
       if(BayesMethod .eq. BayesB .or. BayesMethod .eq. BayesC) then 
           do i=1,ngroup
               p(i,1)=pizero
@@ -76,10 +80,6 @@ subroutine soda_bayes
           pstore=0d0
       end if
   end if  
-  if(BayesMethod .ne. BayesRc) then   
-      snptracker(:,1)=1
-  end if  
-  snptracker(:,2)=2
   counter=0
   do i=1,nskipped
       j = i_skipped(i)
@@ -94,9 +94,9 @@ subroutine soda_bayes
       yhat=sum(why)/nnind
       vary= sum((why-yhat)*(why-yhat))/(nnind-1.0d0)
       if(BayesMethod .eq. BayesA) then
-          vara=2.0d0*scale_va*vary/nloci   !scale_va as heritability
+          vara=scale_va*vary/nloci   !scale_va as heritability
       else if(BayesMethod .eq. BayesB) then
-          vara=2.0d0*scale_va*vary/nloci/p(1,2) 
+          vara=scale_va*vary/nloci/p(1,2) 
       else
           do i=1,ngroup
               vara = vara + dot_product(p(i,:),mix)
@@ -653,6 +653,10 @@ subroutine regular_bayes()
       snpstore=0d0
       indiststore=0d0  
       varstore=0.0d0
+      if(BayesMethod .ne. BayesRc) then   
+          snptracker(:,1)=1
+      end if  
+      snptracker(:,2)=2      
       if(BayesMethod .eq. BayesB .or. BayesMethod .eq. BayesC) then 
           do i=1,ngroup
               p(i,1)=pizero
@@ -667,10 +671,7 @@ subroutine regular_bayes()
           pstore=0d0
       end if
    end if  
-   if(BayesMethod .ne. BayesRc) then   
-      snptracker(:,1)=1
-   end if  
-   snptracker(:,2)=2
+
    counter=0
    do i=1,nloci
       xpx(i)=dot_product(X(:,i),X(:,i))
@@ -685,9 +686,9 @@ subroutine regular_bayes()
        yhat=sum(why)/nnind
        vary= sum((why-yhat)*(why-yhat))/(nnind-1.0d0)
        if(BayesMethod .eq. BayesA) then
-           vara=2.0d0*scale_va*vary/nloci   !scale_va as heritability
+           vara=scale_va*vary/nloci   !scale_va as heritability
        else if(BayesMethod .eq. BayesB) then
-           vara=2.0d0*scale_va*vary/nloci/p(1,2)
+           vara=scale_va*vary/nloci/p(1,2)
        else
            do i=1,ngroup
                vara = vara + dot_product(p(i,:),mix)
@@ -730,6 +731,7 @@ subroutine regular_bayes()
               scale=(gt*gt + scale_va*df_va)/(df_va+1.0d0)
               vara_s(snploc)=rand_scaled_inverse_chi_square(df_va+1.0d0,scale,0)        
           end do
+          varindist(1,1)=sum(g*g)
       else if(BayesMethod .eq. BayesB) then 
           log_p(1,1)=dlog(p(1,1))
           log_p(1,2)=dlog(p(1,2))
