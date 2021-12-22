@@ -1,5 +1,5 @@
 # SODABayes
-subsetted orthogonal data augmentation for Bayesian genomic prediction
+subsetted orthogonal data augmentation for parallel implementation of Bayesian genomic prediction
 
 supportted models: BayesA, BayesB, BayesC, BayesCpi, BayesR, and BayesRc
 # Source code
