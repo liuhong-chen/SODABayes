@@ -1,0 +1,30 @@
+#Example 4: run SODABayesRc for MCMC sampling and prediction 
+
+BEGIN BayesRc_Example_MCMC        
+   -bfile ../data/simdata1_train         #input file prefix
+   -method BayesRc                       #BayesA/BayesB/BayesC/BayesCpi/BayesR/BayesRc
+   -grpfile ../data/group.txt            #snp group file
+   -scale_va 50                          #scale for snp variance
+   -scale_ve 50                          #scale for residual variance
+   -df_va 4.5                            #degree of freedom for snp variance
+   -df_ve 4.5                            #degree of freendom for residual variance
+   -nmix 4                               #number of mixture distribution
+   -mix 0,0.0001,0.001,0.01              #proportional variances of mixture distributions
+   -numit 10000                          #mcmc chain length
+   -burnin 2000                          #burn-in period
+   -thin 10                              #thinning rate
+   -nthreads 10                          #Default: 1
+   -nblocks 10                           #number of blocks for SODA
+   -seed 123456789                       #seed for random nubmer generator;set to 0 will use system_clock()
+   -out bayesrc_mcmc_example_4           #output file prefix 
+END BayesRc_Example_MCMC
+
+BEGIN BayesRc_Example_Prediction
+    -bfile ../data/simdata1_pred          #input file prefix
+    -predict                              #default: false    
+    -model   bayesrc_mcmc_example_4.mod   #model parameter file
+    -freq    bayesrc_mcmc_example_4.frq   #snp allele frequency file
+    -effects bayesrc_mcmc_example_4.eff   #snp effect file
+    -out pred_bayesrc_mcmc_example_4      #output file prefix
+END BayesRc_Example_Prediction
+   
