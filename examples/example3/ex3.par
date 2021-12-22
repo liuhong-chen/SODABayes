@@ -1,0 +1,12 @@
+#example 1: run prediction only
+
+
+BEGIN BayesR_Example_Prediction          #BEGIN job_name
+    -bfile ../data/simdata1_pred         #input file prefix
+    -predict                             #default: false    
+    -model   bayesr_mcmc_example_2.mod   #model parameter file
+    -freq    bayesr_mcmc_example_2.frq   #snp allele frequency file
+    -effects bayesr_mcmc_example_2.eff   #snp effect file
+    -out pred_bayesr__example_3          #output file prefix
+END BayesR_Example_Prediction            #END job_name
+   

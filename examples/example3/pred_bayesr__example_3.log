@@ -1,0 +1,10 @@
+Running program SODABayes: BayesR_Example_Prediction
+      Run started at 2021-12-21 15:31:32
+Prefix for input files       : ../data/simdata1_pred
+No. of loci                  =     9346
+No. of individuals           =      900
+model file                   : bayesr_mcmc_example_2.mod
+freq file                    : bayesr_mcmc_example_2.frq
+effects file                 : bayesr_mcmc_example_2.eff
+Prefix for output files      : pred_bayesr__example_3
+        Run ended at 2021-12-21 15:31:33
