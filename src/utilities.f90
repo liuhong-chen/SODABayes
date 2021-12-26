@@ -1,4 +1,3 @@
-
 module utilities
 use globals
 use ParallelRNG
