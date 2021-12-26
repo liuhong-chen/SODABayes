@@ -1,5 +1,3 @@
-
-module ParallelRNG
 !------------------------------------------------------------------------------------ 
 !This module contains a parallel random number generator and random variables from
 !various distributions
@@ -8,6 +6,7 @@ module ParallelRNG
 ! The method is described in Marsaglia, G. & Tsang, W.W. (2000)
 ! `The ziggurat method for generating random variables', J. Statist. Software, v5(8).
 !------------------------------------------------------------------------------------
+module ParallelRNG
   use globals, only: int32, int64, real32, real64
   implicit none
 
