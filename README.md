@@ -11,11 +11,11 @@ utilities.f90
 soda.f90
 models.f90
 # Compiling
-ifort -o soda -qopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes
+ifort -o sodaBayes -qopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes
 
 or
 
-gfortran -o soda -fopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes
+gfortran -o sodaBayes -fopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes
 # Usage
 The program can be run with command line options or a parameter file. Refer to the manual for instructions.
 
