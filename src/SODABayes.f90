@@ -128,7 +128,6 @@ program SODABayes
     call allocate_data
     call load_geno
     call xscale
-
     if(mcmc) then
        call load_pheno
        call set_random_seed    
