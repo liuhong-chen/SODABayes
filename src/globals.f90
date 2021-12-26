@@ -1,20 +1,3 @@
-!**************************************************************************************************
-! SODABayes version 1.10
-! Author: Liuhong Chen
-!    
-! Subsetted Orthogonal Data Augmentation (SODA) for Bayesian analyses of complex traits.
-!  
-!    
-! Current version supports BayesR, BayesCpi methods.
-!    
-! This program is free for academic uses. You can redistribute it and/or modify it under the terms 
-! of the GNU General Public License as published by the Free Software Foundation.
-!
-! This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-! without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-! Please report to the author(s) any bugs you found or any suggestions that you think could 
-! potentially improve the performance of the program.
-!**************************************************************************************************
  module globals
   use iso_fortran_env, only: int32, int64, real32, real64
   implicit none
