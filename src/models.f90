@@ -55,7 +55,6 @@ subroutine soda_bayes
 
   nnind=dble(nind)
   nnaind=dble(naind)+nnind
-
   if(BayesMethod .ne. BayesA) then 
       included_store=0d0
       snpstore=0d0
@@ -131,7 +130,8 @@ subroutine soda_bayes
       yadj=yadj+mu
       mu=rand_normal(sum(yadj)/nnind, dsqrt(vare/nnind),0)
       yadj=yadj-mu
-      if(BayesMethod .eq. BayesA) then            
+      if(BayesMethod .eq. BayesA) then 
+          !$omp parallel private(ls,le,zz,zz_vare,thread,jk,snploc,z,za,rhs,v1,gk,gdiff,scale)
           do blocki=1, nblocks
           if(blocki<=blockt) then  
               ls = (blocki-1)*blocksize+1
@@ -142,8 +142,7 @@ subroutine soda_bayes
           end if 
           zz=xxd(blocki)
           zz_vare=zz/vare
-          !$omp parallel private(thread,jk,snploc,z,za,rhs,v1,gk,gdiff,scale)
-          !$omp do
+          !$omp do      
           do k=ls,le
               if(skip_j(k)) cycle 
               jk=k-ls+1
@@ -174,8 +173,8 @@ subroutine soda_bayes
               yAadj=yAadj+za*gdiff
           end do
           !$omp end do
-          !$omp end parallel    
-          enddo    
+          enddo
+          !$omp end parallel             
           do k=1,nskipped
               snploc = i_skipped(k)
               z => X(:,snploc)
@@ -193,7 +192,9 @@ subroutine soda_bayes
               vara_s(snploc)=rand_scaled_inverse_chi_square(df_va+1.0d0,scale,0)                      
           end do  
           varindist(1,1)=sum(g*g)
-      else if(BayesMethod .eq. BayesB) then      
+      else if(BayesMethod .eq. BayesB) then 
+          !$omp parallel private(ls,le,zz,zz_vare,jk,thread,snploc,z,za,gk,rhs) &
+          !$omp private(log_p,s,sk,logdetV,uhat,v1,gdiff,r,clike,indistflag,scale)      
           log_p(1,1)=dlog(p(1,1))          
           log_p(1,2)=dlog(p(1,2))
           do blocki=1, nblocks
@@ -206,7 +207,6 @@ subroutine soda_bayes
               end if 
               zz=xxd(blocki)
               zz_vare=zz/vare
-              !$omp parallel private(jk,thread,snploc,z,za,gk,rhs,s,sk,logdetV,uhat,v1,gdiff,r,clike,indistflag,scale)
               !$omp do
               do k=ls,le
                   if(skip_j(k)) cycle 
@@ -271,8 +271,8 @@ subroutine soda_bayes
                   yAadj=yAadj+za*gdiff        
               end do
               !$omp end do
-              !$omp end parallel     
           enddo
+          !$omp end parallel       
           do k=1,nskipped
               snploc = i_skipped(k)
               z => X(:,snploc)
@@ -323,7 +323,10 @@ subroutine soda_bayes
           snpindist(1,2) = included
           varindist(1,1) = 0.0d0
           varindist(1,2) = sum(g*g, snptracker(:,2)==2)
-      else 
+      else
+          !$omp parallel &
+          !$omp private(log_p,ls,le,thread,snploc,logdetV,uhat,z,za,rhs,v1,gk,gdiff,s,r) &
+          !$omp private(vare_gp,zz,zz_vare,stemp,sk,skk,jk,clike,overflow,ssculm,indistflag,sg)      
           do i=1,ngroup
               log_p(i,1)=dlog(p(i,1))          
               do j=2,nmix
@@ -343,9 +346,6 @@ subroutine soda_bayes
               end if 
               zz=xxd(blocki)
               zz_vare=zz/vare
-              !$omp parallel &
-              !$omp private(thread,snploc,logdetV,uhat,z,za,rhs,v1,gk,gdiff,s,r) &
-              !$omp private(stemp,sk,skk,jk,clike,overflow,ssculm,indistflag,sg)
               !$omp do
               do k=ls,le
                   if(skip_j(k)) cycle 
@@ -428,8 +428,8 @@ subroutine soda_bayes
                   yAadj=yAadj+za*gdiff        
               end do
               !$omp end do
-              !$omp end parallel 
           enddo
+          !$omp end parallel          
           do k=1,nskipped
               snploc = i_skipped(k)
               z => X(:,snploc)
