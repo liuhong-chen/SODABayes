@@ -20,8 +20,8 @@ gfortran -o sodaBayes -fopenmp globals.f90 parallelrng.f90 utilities.f90 useropt
 The program can be run with command line options or a parameter file. Refer to the manual for instructions.
 
 # License
-This program is free for academic uses. You can redistribute it and/or modify it under the terms 
-of the GNU General Public License as published by the Free Software Foundation.
+This program is free for research use. Please contact the authors for non-research use. 
+You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
