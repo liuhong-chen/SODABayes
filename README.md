@@ -11,11 +11,11 @@ useroptions.f90 – a module that handles various user defined options;
 soda.f90 – a module that generates the orthogonal augmenting matrix;
 models.f90 – Bayesian models using either regular or SODA algorithms.
 # Compiling
-ifort -o sodaBayes -qopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes
+ifort -o sodaBayes -qopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes.f90
 
 or
 
-gfortran -o sodaBayes -fopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes
+gfortran -o sodaBayes -fopenmp globals.f90 parallelrng.f90 utilities.f90 useroptions.f90 soda.f90 models.f90 SODABayes.f90
 # Usage
 The program can be run with command line options or a parameter file. Refer to the manual for instructions.
 
