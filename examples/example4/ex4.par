@@ -13,9 +13,9 @@ BEGIN BayesRc_Example_MCMC
    -numit 10000                          #mcmc chain length
    -burnin 2000                          #burn-in period
    -thin 10                              #thinning rate
-   -nthreads 10                          #Default: 1
+   -nthreads 10                          #Default: max threads available
    -nblocks 10                           #number of blocks for SODA
-   -seed 123456789                       #seed for random nubmer generator;set to 0 will use system_clock()
+   -seed 123456789                       #Default: system_clock()
    -out bayesrc_mcmc_example_4           #output file prefix 
 END BayesRc_Example_MCMC
 
